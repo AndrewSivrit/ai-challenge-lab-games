@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Knight: Gem Odyssey</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <div id="header-bar">
+      <div class="brand">★ STAR KNIGHT ★</div>
+      <div class="audio-controls">
+        <button id="music-toggle" aria-label="Toggle Music">♪ MUSIC: ON</button>
+        <button id="sfx-toggle" aria-label="Toggle SFX">🔊 SFX: ON</button>
+      </div>
+    </div>
+    <div id="canvas-wrapper">
+      <canvas id="gameCanvas" width="800" height="420"></canvas>
+    </div>
+    <div id="instructions">
+      <span>Move: <b>A / D</b> or <b>← / →</b></span>
+      <span>Jump: <b>SPACE</b></span>
+      <span>Restart: <b>R</b></span>
+      <span>Mute Music: <b>M</b></span>
+    </div>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

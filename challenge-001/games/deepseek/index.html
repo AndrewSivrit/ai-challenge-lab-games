@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lumen Rift — Chiptune Platformer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="960" height="540"></canvas>
+
+  <div id="hud">
+    <div class="stat"><span class="lbl">SCORE</span><span id="hudScore">0</span></div>
+    <div class="stat"><span class="lbl">LIVES</span><span id="hudLives">♥♥♥</span></div>
+    <div class="stat"><span class="lbl">LEVEL</span><span id="hudLevel">1/3</span></div>
+    <div class="stat"><span class="lbl">COINS</span><span id="hudCoins">0/0</span></div>
+    <div id="spacer"></div>
+    <button id="btnMusic" title="Toggle music (M)">MUSIC: ON</button>
+    <button id="btnMute" title="Toggle sound effects">SFX: ON</button>
+  </div>
+
+  <div id="overlay" class="show">
+    <div class="panel" id="panelTitle">
+      <h1>LUMEN RIFT</h1>
+      <p class="sub">A chiptune platformer across three fractured realms</p>
+      <div class="keys">
+        <div><b>← →</b> / <b>A D</b> — move</div>
+        <div><b>Space</b> / <b>W</b> / <b>↑</b> — jump (hold for higher)</div>
+        <div><b>M</b> — music on/off &nbsp; <b>N</b> — sfx on/off &nbsp; <b>P</b> — pause</div>
+      </div>
+      <button id="btnStart" class="big">START GAME</button>
+      <p class="hint">Collect sparks, dodge the drifters, reach the rift gate.</p>
+    </div>
+  </div>
+</div>
+<script src="audio.js"></script>
+<script src="levels.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

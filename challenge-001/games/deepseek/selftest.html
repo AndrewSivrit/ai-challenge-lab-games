@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>selftest</title></head>
+<body style="margin:0;background:#000">
+<iframe id="f" src="index.html" style="width:960px;height:540px;border:0"></iframe>
+<pre id="out" style="color:#0f0;font:12px monospace"></pre>
+<script>
+var log = [];
+function L(s){ log.push(s); }
+var f = document.getElementById('f');
+f.onload = function(){
+  var w = f.contentWindow, d = f.contentDocument;
+  var tries = 0;
+  var iv = setInterval(function(){
+    if(!w.LUMEN){ if(tries++>80){ L('NO LUMEN'); finish(); } return; }
+    clearInterval(iv);
+    try{ run(w,d); }catch(e){ L('ERROR '+e.message+'\n'+e.stack); }
+    finish();
+  },50);
+  function finish(){
+    document.getElementById('out').textContent = log.join('\n');
+    window.TESTDONE = true;
+  }
+  function run(w,d){
+    var LM = w.LUMEN, G = LM.G, dbg = LM.debug;
+    L('state0='+LM.state);
+    L('title panel visible='+d.getElementById('overlay').classList.contains('show'));
+    var startBtn = d.getElementById('btnStart');
+    startBtn.click();
+    L('after start: state='+LM.state+' lives='+G.lives+' level='+G.levelIndex);
+    L('music on='+LM.Chiptune.musicOn+' playing='+LM.Chiptune._playing+' ctx='+(LM.Chiptune.ctx?'yes':'no')+' state='+(LM.Chiptune.ctx&&LM.Chiptune.ctx.state));
+    // coin collect
+    var c = LM.coins.find(function(x){return !x.got;});
+    var p = LM.player;
+    p.x = c.x - 4; p.y = c.y - 4;
+    // wait for a frame tick via rAF
+    w.requestAnimationFrame(function(){ w.requestAnimationFrame(function(){
+      L('coins after touch: levelCoins='+G.levelCoins+' score='+G.score);
+      // damage
+      var lv0 = G.lives;
+      dbg.hurt();
+      L('after hurt: dying='+p.dying+' lives='+G.lives+' (was '+lv0+')');
+      // warp to goal, level 1
+      setTimeout(function(){
+        dbg.warpToGoal();
+        setTimeout(function(){
+          L('after goal1: state='+LM.state+' score='+G.score);
+          setTimeout(function(){
+            L('next level: state='+LM.state+' levelIndex='+G.levelIndex+' name='+LM.level.name);
+            dbg.warpToGoal();
+            setTimeout(function(){
+              setTimeout(function(){
+                L('level2 clear-> levelIndex='+G.levelIndex+' name='+LM.level.name+' state='+LM.state);
+                dbg.warpToGoal();
+                setTimeout(function(){
+                  L('final: state='+LM.state+' victoryPanel='+(d.getElementById('overlay').textContent.indexOf('YOU WIN')>=0));
+                  L('music playing after win='+LM.Chiptune._playing);
+                  // restart -> force game over
+                  dbg.restart();
+                  L('after restart: state='+LM.state+' lives='+G.lives+' level='+G.levelIndex+' score='+G.score);
+                  dbg.setLives(1); dbg.hurt();
+                  setTimeout(function(){
+                    L('after final death: state='+LM.state+' gameOverPanel='+(d.getElementById('overlay').textContent.indexOf('GAME OVER')>=0));
+                    L('timer count after stop='+LM.Chiptune._timer);
+                    dbg.restart();
+                    L('restart2: state='+LM.state+' lives='+G.lives+' playing='+LM.Chiptune._playing+' on='+LM.Chiptune.musicOn);
+                    window.TESTDONE = true;
+                  }, 2200);
+                }, 1600);
+              }, 1600);
+            }, 1600);
+          }, 1600);
+        }, 200);
+      }, 1500);
+    }); });
+  }
+};
+</script>
+</body></html>
